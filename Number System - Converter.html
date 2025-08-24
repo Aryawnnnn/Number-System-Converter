@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number System Converter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .converter-section {
+            padding: 40px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .input-container {
+            position: relative;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .input-container input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .input-container input:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .base-selector {
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1.1em;
+            background: white;
+            cursor: pointer;
+            min-width: 120px;
+        }
+
+        .base-selector:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        .convert-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+        }
+
+        .convert-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .results {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .results h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .result-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #333;
+            background: #f1f3f4;
+            padding: 8px 12px;
+            border-radius: 5px;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-left: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #218838;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #f5c6cb;
+        }
+
+        .info-section {
+            background: #e7f3ff;
+            padding: 25px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        .info-section h4 {
+            color: #0066cc;
+            margin-bottom: 15px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .info-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #0066cc;
+        }
+
+        .info-item strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .converter-section {
+                padding: 20px;
+            }
+            
+            .input-container {
+                flex-direction: column;
+            }
+            
+            .base-selector {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔢 Number System Converter</h1>
+            <p>Convert between Binary, Decimal, Hexadecimal, and Octal number systems</p>
+        </div>
+
+        <div class="converter-section">
+            <div class="input-group">
+                <label for="inputNumber">Enter Number:</label>
+                <div class="input-container">
+                    <input type="text" id="inputNumber" placeholder="Enter your number here..." autocomplete="off">
+                    <select id="inputBase" class="base-selector">
+                        <option value="2">Binary (Base 2)</option>
+                        <option value="8">Octal (Base 8)</option>
+                        <option value="10" selected>Decimal (Base 10)</option>
+                        <option value="16">Hexadecimal (Base 16)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="convert-btn" onclick="convertNumber()">🔄 Convert Number</button>
+
+            <div id="errorMessage"></div>
+            <div id="results"></div>
+
+            <div class="info-section">
+                <h4>📚 Number System Information</h4>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Binary (Base 2)</strong>
+                        Uses digits: 0, 1<br>
+                        Example: 1010 = 10 in decimal
+                    </div>
+                    <div class="info-item">
+                        <strong>Octal (Base 8)</strong>
+                        Uses digits: 0-7<br>
+                        Example: 12 = 10 in decimal
+                    </div>
+                    <div class="info-item">
+                        <strong>Decimal (Base 10)</strong>
+                        Uses digits: 0-9<br>
+                        Example: 10 = standard counting
+                    </div>
+                    <div class="info-item">
+                        <strong>Hexadecimal (Base 16)</strong>
+                        Uses: 0-9, A-F<br>
+                        Example: A = 10 in decimal
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function convertNumber() {
+            const input = document.getElementById('inputNumber').value.trim();
+            const inputBase = parseInt(document.getElementById('inputBase').value);
+            const errorDiv = document.getElementById('errorMessage');
+            const resultsDiv = document.getElementById('results');
+
+            // Clear previous results and errors
+            errorDiv.innerHTML = '';
+            resultsDiv.innerHTML = '';
+
+            if (!input) {
+                showError('Please enter a number to convert.');
+                return;
+            }
+
+            try {
+                // Validate input based on selected base
+                if (!isValidNumber(input, inputBase)) {
+                    showError(`Invalid ${getBaseName(inputBase)} number. Please check your input.`);
+                    return;
+                }
+
+                // Convert to decimal first
+                const decimalValue = parseInt(input, inputBase);
+                
+                if (isNaN(decimalValue)) {
+                    showError('Invalid number format.');
+                    return;
+                }
+
+                // Generate all conversions
+                const conversions = {
+                    'Binary (Base 2)': decimalValue.toString(2),
+                    'Octal (Base 8)': decimalValue.toString(8),
+                    'Decimal (Base 10)': decimalValue.toString(10),
+                    'Hexadecimal (Base 16)': decimalValue.toString(16).toUpperCase()
+                };
+
+                displayResults(conversions, input, inputBase);
+
+            } catch (error) {
+                showError('Error converting number. Please check your input.');
+            }
+        }
+
+        function isValidNumber(input, base) {
+            const cleanInput = input.toLowerCase().replace(/[^0-9a-f]/g, '');
+            
+            switch (base) {
+                case 2: // Binary
+                    return /^[01]+$/.test(cleanInput);
+                case 8: // Octal
+                    return /^[0-7]+$/.test(cleanInput);
+                case 10: // Decimal
+                    return /^[0-9]+$/.test(cleanInput);
+                case 16: // Hexadecimal
+                    return /^[0-9a-f]+$/.test(cleanInput);
+                default:
+                    return false;
+            }
+        }
+
+        function getBaseName(base) {
+            const names = {
+                2: 'Binary',
+                8: 'Octal',
+                10: 'Decimal',
+                16: 'Hexadecimal'
+            };
+            return names[base] || 'Unknown';
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.innerHTML = `<div class="error">❌ ${message}</div>`;
+        }
+
+        function displayResults(conversions, originalInput, originalBase) {
+            const resultsDiv = document.getElementById('results');
+            const originalBaseName = getBaseName(originalBase);
+            
+            let html = `
+                <div class="results">
+                    <h3>🎯 Conversion Results</h3>
+                    <div class="result-item">
+                        <span class="result-label">Original Input (${originalBaseName}):</span>
+                        <div>
+                            <span class="result-value">${originalInput}</span>
+                        </div>
+                    </div>
+            `;
+
+            for (const [system, value] of Object.entries(conversions)) {
+                html += `
+                    <div class="result-item">
+                        <span class="result-label">${system}:</span>
+                        <div>
+                            <span class="result-value">${value}</span>
+                            <button class="copy-btn" onclick="copyToClipboard('${value}')">📋 Copy</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            html += '</div>';
+            resultsDiv.innerHTML = html;
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Show temporary feedback
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = '✅ Copied!';
+                button.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#28a745';
+                }, 2000);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Allow Enter key to trigger conversion
+        document.getElementById('inputNumber').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                convertNumber();
+            }
+        });
+
+        // Auto-convert on input change (with debounce)
+        let timeout;
+        document.getElementById('inputNumber').addEventListener('input', function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                if (this.value.trim()) {
+                    convertNumber();
+                }
+            }, 500);
+        });
+
+        document.getElementById('inputBase').addEventListener('change', function() {
+            const input = document.getElementById('inputNumber').value.trim();
+            if (input) {
+                convertNumber();
+            }
+        });
+    </script>
+</body>
+</html>
